@@ -19,6 +19,14 @@ function Desole(config) {
 	}
 }
 
+Desole.isErrorObject = function (obj) {
+	'use strict';
+
+	var o = {};
+	var type = o.toString.apply(obj);
+	return type === '[object Object]' || type === '[object Error]';
+};
+
 Desole.prototype.attach = function () {
 	'use strict';
 
@@ -26,10 +34,11 @@ Desole.prototype.attach = function () {
 	if (self.modules.indexOf('onerror') > -1) {
 		self._originalOnError = global && global.onerror;
 		global.onerror = function (message, url, lineNo, columnNo, err) {
+			var isErrObj = Desole.isErrorObject(err);
 			self.track({
 				severity: 'error',
-				stack: (typeof err === 'object' && err.stack) || String(err),
-				type: err.name,
+				stack: (isErrObj && err.stack) || String(err),
+				type: (isErrObj && err.name) || '',
 				message: message || String(err)
 			});
 
@@ -93,6 +102,7 @@ Desole.prototype.dettach = function () {
 Desole.prototype.track = function (clientOptions) {
 	'use strict';
 
+	var msg = 'unknown error';
 	var http = new global.XMLHttpRequest(),
 		url = this.url,
 		options = {
@@ -119,6 +129,10 @@ Desole.prototype.track = function (clientOptions) {
 			options.stack = JSON.stringify(options.stack);
 		} catch (err) {
 			console.log('Stack trace conversion to string failed', err);
+			try {
+				msg = JSON.stringify(err);
+			} catch (e) { }
+			options.stack = 'Stack trace conversion to string failed: ' + msg;
 		}
 	}
 	http.open('POST', url, true);
