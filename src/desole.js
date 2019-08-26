@@ -53,12 +53,19 @@ Desole.prototype.attach = function () {
 
 		console.error = function () {
 			var args = Array.prototype.slice.call(arguments);
-
+			var stack;
+			function stringify(item) {
+				try {
+					return JSON.stringify(item);
+				} catch (e) { }
+				return String(item);
+			}
+			stack = args.map(stringify);
 			self.track({
 				severity: 'info',
-				stack: args.join(', '),
+				stack: stack.join(', '),
 				type: 'ConsoleError',
-				message: args.join(', ')
+				message: stack.length ? stack[0] : 'args: ' + args.join(', ')
 			});
 
 			self._originalConsoleError.apply(this, arguments);

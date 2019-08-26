@@ -20,7 +20,7 @@ module.exports = {
 		crossOriginLoading: 'anonymous',
 		library: 'Desole',
 		libraryTarget: 'window',
-		filename: 'client-min.js',
+		filename: 'client-min-' + String(Date.now()) + '.js',
 		path: path.resolve(__dirname, 'dist')
 	},
 	plugins: [
