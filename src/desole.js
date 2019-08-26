@@ -53,12 +53,21 @@ Desole.prototype.attach = function () {
 
 		console.error = function () {
 			var args = Array.prototype.slice.call(arguments);
-
+			var err = args.shift();
+			var message = '', stack = '';
+			if (Desole.isErrorObject(err)) {
+				try {
+					message = JSON.stringify(err);
+				} catch (e) {
+					message = String(err);
+				}
+			}
+			stack = args.length > 0 ? args.join(', ') : message;
 			self.track({
 				severity: 'info',
-				stack: args.join(', '),
+				stack: stack,
 				type: 'ConsoleError',
-				message: args.join(', ')
+				message: message
 			});
 
 			self._originalConsoleError.apply(this, arguments);
