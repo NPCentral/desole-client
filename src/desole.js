@@ -55,11 +55,9 @@ Desole.prototype.attach = function () {
 			var args = Array.prototype.slice.call(arguments);
 			var stack;
 			function stringify(item) {
-				if (Desole.isErrorObject(item)) {
-					try {
-						return JSON.stringify(item);
-					} catch (e) { }
-				}
+				try {
+					return JSON.stringify(item);
+				} catch (e) { }
 				return String(item);
 			}
 			stack = args.map(stringify);
