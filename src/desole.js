@@ -65,7 +65,7 @@ Desole.prototype.attach = function () {
 				severity: 'info',
 				stack: stack.join(', '),
 				type: 'ConsoleError',
-				message: (stack.length && stack[0] && stack[0].message) || args.join(', ')
+				message: (args.length && args[0] && stringify(args[0].message)) || args.join(', ')
 			});
 
 			self._originalConsoleError.apply(this, arguments);
