@@ -56,7 +56,7 @@ Desole.prototype.attach = function () {
 			var stack;
 			function stringify(item) {
 				try {
-					return JSON.stringify(item);
+					return typeof item === 'object' ? JSON.stringify(item) : String(item);
 				} catch (e) { }
 				return String(item);
 			}
