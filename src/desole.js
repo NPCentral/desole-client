@@ -90,7 +90,7 @@ Desole.prototype.attach = function () {
 	}
 };
 
-Desole.prototype.dettach = function () {
+Desole.prototype.detach = function () {
 	'use strict';
 
 	if (this.modules.indexOf('onerror') > -1) {
