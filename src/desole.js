@@ -131,10 +131,6 @@ Desole.prototype.track = function (clientOptions) {
 			tags: clientOptions.tags || this.tags
 		};
 
-	if (clientOptions.message && /Object Not Found Matching Id/i.test(clientOptions.message)) {
-		return;
-	}
-
 	options.stack = clientOptions.stack;
 	if (typeof options.stack !== 'string') {
 		try {
@@ -147,6 +143,15 @@ Desole.prototype.track = function (clientOptions) {
 			options.stack = 'Stack trace conversion to string failed: ' + msg;
 		}
 	}
+
+	var re = /Object Not Found Matching Id/i;
+	if (
+		options.message && re.test(options.message)
+        || options.stack && re.test(options.stack)
+	) {
+		return;
+	}
+
 	http.open('POST', url, true);
 	http.setRequestHeader('Content-type', 'application/json');
 
