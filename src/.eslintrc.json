@@ -5,6 +5,7 @@
   "rules": {
     "prefer-const": 0,
     "strict": ["error", "function"],
-    "no-var": 0
+    "no-var": 0,
+    "vars-on-top": ["warn"]
   }
 }
