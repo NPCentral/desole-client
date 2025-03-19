@@ -130,6 +130,11 @@ Desole.prototype.track = function (clientOptions) {
 			},
 			tags: clientOptions.tags || this.tags
 		};
+
+	if (clientOptions.message && /Object Not Found Matching Id/i.test(clientOptions.message)) {
+		return;
+	}
+
 	options.stack = clientOptions.stack;
 	if (typeof options.stack !== 'string') {
 		try {
